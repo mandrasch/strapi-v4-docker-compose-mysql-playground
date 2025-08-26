@@ -13,28 +13,35 @@ Make sure to stop other projects with MySQL/DB with `docker compose down`.
 
 ## Usage
 
-Import database dump: 
+### Import database dump: 
 
 ```bash
 docker compose exec strapiDB sh -c \
   'mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" strapi' > dump.sql.gz
 ```
 
-Restore a database dump:
+### Restore a database dump:
 
 ```bash
 docker compose exec -T strapiDB sh -c \
   'mysql -u root -p"$MYSQL_ROOT_PASSWORD" strapi' < dump.sql.gz
-  ```
+```
 
-Install plugins via:
+### Install plugins via:
+
+1. Update `package.json` with new package, e.g. `npm install strapi-plugin-translate` locally
+2. restart with CRTL+c / `docker compose down` and 
 
 ```bash
-docker compose exec strapi npm install strapi-plugin-translate
+# (runs `npm i` in Dockerfile)
+docker compose up --build
 
-# restart with CRTL + or when detached with docker compose up -d
-docker compose down && docker compose up
+# or
+docker compose build
+docker compose up
 ```
+
+TODO: Better approach, do it with `docker compose exex strapi ...`, but mount can't be only for package.json?!
 
 ## TODOs
 
@@ -42,6 +49,7 @@ docker compose down && docker compose up
 - [ ] re-add `sharp` for image resizing, issues (even with `platform: linux/amd64`)
   - [ ] remove `platform: linux/amd64` from strapi or use `strapi:latest`?
 - [ ] add phpMyAdmin
+- [ ] git track package-lock.json? But mount needs to be a folder?
 
 (StrapiDB needs `platform: linux/amd64` since MySQL v5 has no ARM/M image)
 
