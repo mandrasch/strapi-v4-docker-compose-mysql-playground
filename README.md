@@ -13,7 +13,7 @@ Make sure to stop other projects with MySQL/DB with `docker compose down`.
 
 ## Usage
 
-### Import database dump: 
+### Export database dump: 
 
 ```bash
 docker compose exec strapiDB sh -c \
